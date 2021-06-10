@@ -7,6 +7,7 @@ import com.rentero.renteroserver.payload.request.CustomerReqDto;
 import com.rentero.renteroserver.payload.response.CustomerDto;
 import com.rentero.renteroserver.repository.CustomerRepository;
 import com.rentero.renteroserver.repository.RoleRepository;
+import com.rentero.renteroserver.security.SecurityUtils;
 import com.rentero.renteroserver.service.mapper.DtoMapper;
 import com.rentero.renteroserver.service.mapper.EntityMapper;
 import org.springframework.stereotype.Service;
@@ -58,6 +59,18 @@ public class CustomerService {
         Customer newCustomer = customerRepository.save(customer);
 
         return dtoMapper.mapToCustomerDto(newCustomer);
+    }
+
+    public CustomerDto uploadAvatar(String avatarUrl) {
+        String customerEmail = SecurityUtils.getCurrentCustomerEmail();
+
+        Customer customer = customerRepository.findByEmail(customerEmail).get();
+
+        customer.setAvatarUrl(avatarUrl);
+
+        Customer updatedCustomer = customerRepository.save(customer);
+
+        return dtoMapper.mapToCustomerDto(updatedCustomer);
     }
 
     public void deleteCustomer(long id) {

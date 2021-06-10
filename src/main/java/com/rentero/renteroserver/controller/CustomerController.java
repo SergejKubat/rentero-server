@@ -4,9 +4,12 @@ import com.rentero.renteroserver.payload.request.CustomerReqDto;
 import com.rentero.renteroserver.payload.response.CustomerDto;
 import com.rentero.renteroserver.repository.CustomerRepository;
 import com.rentero.renteroserver.service.CustomerService;
+import com.rentero.renteroserver.service.FileStorageService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -19,9 +22,12 @@ public class CustomerController {
     private CustomerService customerService;
     private CustomerRepository customerRepository;
 
-    public CustomerController(CustomerService customerService, CustomerRepository customerRepository) {
+    private FileStorageService fileStorageService;
+
+    public CustomerController(CustomerService customerService, CustomerRepository customerRepository, FileStorageService fileStorageService) {
         this.customerService = customerService;
         this.customerRepository = customerRepository;
+        this.fileStorageService = fileStorageService;
     }
 
     @GetMapping
@@ -48,6 +54,20 @@ public class CustomerController {
         customerService.createCustomer(customerReqDto);
 
         return new ResponseEntity<>("Customer registered successfully.", HttpStatus.CREATED);
+    }
+
+    @PutMapping
+    public ResponseEntity<CustomerDto> uploadAvatar(@RequestParam(name = "file") MultipartFile file) {
+        String fileName = fileStorageService.storeFile(file);
+
+        String avatarUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/img/")
+                .path(fileName)
+                .toUriString();
+
+        CustomerDto customerDto = customerService.uploadAvatar(avatarUrl);
+
+        return new ResponseEntity<>(customerDto, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
