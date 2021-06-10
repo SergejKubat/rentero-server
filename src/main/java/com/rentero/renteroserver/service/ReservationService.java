@@ -2,15 +2,14 @@ package com.rentero.renteroserver.service;
 
 import com.rentero.renteroserver.exception.ResourceNotFoundException;
 import com.rentero.renteroserver.model.Car;
-import com.rentero.renteroserver.model.Company;
 import com.rentero.renteroserver.model.Customer;
 import com.rentero.renteroserver.model.Reservation;
 import com.rentero.renteroserver.payload.request.ReservationReqDto;
 import com.rentero.renteroserver.payload.response.ReservationDto;
 import com.rentero.renteroserver.repository.CarRepository;
-import com.rentero.renteroserver.repository.CompanyRepository;
 import com.rentero.renteroserver.repository.CustomerRepository;
 import com.rentero.renteroserver.repository.ReservationRepository;
+import com.rentero.renteroserver.security.SecurityUtils;
 import com.rentero.renteroserver.service.mapper.DtoMapper;
 import com.rentero.renteroserver.service.mapper.EntityMapper;
 import org.springframework.stereotype.Service;
@@ -51,7 +50,10 @@ public class ReservationService {
 
     public ReservationDto createReservation(ReservationReqDto reservationReqDto, long carId) {
         Car car  = carRepository.findById(carId).orElseThrow(() -> new ResourceNotFoundException("Car", "id", String.valueOf(carId)));
-        Customer customer = customerRepository.findById(1l).orElseThrow(() -> new ResourceNotFoundException("Customer", "id", String.valueOf(1)));
+
+        String customerEmail = SecurityUtils.getCurrentCustomerEmail();
+
+        Customer customer = customerRepository.findByEmail(customerEmail).get();
 
         Reservation reservation = entityMapper.mapToReservationEntity(reservationReqDto);
 
@@ -63,6 +65,10 @@ public class ReservationService {
         reservation.setPrice(price);
 
         Reservation newReservation = reservationRepository.save(reservation);
+
+        car.setReserved(true);
+
+        carRepository.save(car);
 
         return dtoMapper.mapToReservationDto(newReservation);
     }

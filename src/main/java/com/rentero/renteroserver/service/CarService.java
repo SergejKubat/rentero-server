@@ -23,7 +23,7 @@ public class CarService {
     }
 
     public List<CarDto> getAll() {
-        List<Car> cars = carRepository.findAll();
+        List<Car> cars = carRepository.findAllByReservedFalse();
 
         return cars.stream().map(car -> dtoMapper.mapToCarDto(car)).collect(Collectors.toList());
     }

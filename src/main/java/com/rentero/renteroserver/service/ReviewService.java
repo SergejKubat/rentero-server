@@ -1,19 +1,21 @@
 package com.rentero.renteroserver.service;
 
+import com.rentero.renteroserver.exception.RenteroException;
 import com.rentero.renteroserver.exception.ResourceNotFoundException;
-import com.rentero.renteroserver.model.Company;
-import com.rentero.renteroserver.model.Customer;
-import com.rentero.renteroserver.model.Review;
+import com.rentero.renteroserver.model.*;
 import com.rentero.renteroserver.payload.request.ReviewReqDto;
 import com.rentero.renteroserver.payload.response.ReviewDto;
 import com.rentero.renteroserver.repository.CompanyRepository;
 import com.rentero.renteroserver.repository.CustomerRepository;
 import com.rentero.renteroserver.repository.ReviewRepository;
+import com.rentero.renteroserver.security.SecurityUtils;
 import com.rentero.renteroserver.service.mapper.DtoMapper;
 import com.rentero.renteroserver.service.mapper.EntityMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -48,7 +50,18 @@ public class ReviewService {
 
     public ReviewDto createReview(ReviewReqDto reviewReqDto, long companyId) {
         Company company = companyRepository.findById(companyId).orElseThrow(() -> new ResourceNotFoundException("Company", "id", String.valueOf(companyId)));
-        Customer customer = customerRepository.findById(1l).orElseThrow(() -> new ResourceNotFoundException("Customer", "id", String.valueOf(1)));
+
+        String customerEmail = SecurityUtils.getCurrentCustomerEmail();
+
+        Customer customer = customerRepository.findByEmail(customerEmail).get();
+
+        if (!isCustomerReserveCar(customer, companyId)) {
+            throw new RenteroException(HttpStatus.BAD_REQUEST, "Niste iznajmili ni jedan automobil od ove kompanije.");
+        }
+
+        if (isAlreadyReviewed(customer, companyId)) {
+            throw new RenteroException(HttpStatus.BAD_REQUEST, "Vec ste ocenili kompaniju. Mozete da promenite ocenu.");
+        }
 
         Review review = entityMapper.mapToReviewEntity(reviewReqDto);
 
@@ -64,6 +77,22 @@ public class ReviewService {
         Review review = reviewRepository.findById(reviewId).orElseThrow(() -> new ResourceNotFoundException("Review", "id", String.valueOf(reviewId)));
 
         reviewRepository.delete(review);
+    }
+
+    private boolean isCustomerReserveCar(Customer customer, long companyId) {
+        Set<Reservation> customerReservations = customer.getReservations();
+
+        Set<Car> customerCars = customerReservations.stream().map(customerReservation -> customerReservation.getCar()).collect(Collectors.toSet());
+
+        Set<Car> customerCompanyCars = customerCars.stream().filter(customerCar -> customerCar.getCompany().getId() == companyId).collect(Collectors.toSet());
+
+        return customerCompanyCars.size() > 0;
+    }
+
+    private boolean isAlreadyReviewed(Customer customer, long companyId) {
+        Set<Review> customerReviews = customer.getReviews();
+
+        return customerReviews.stream().filter(customerReview -> customerReview.getCompany().getId() == companyId).collect(Collectors.toSet()).size() != 0;
     }
 
 }

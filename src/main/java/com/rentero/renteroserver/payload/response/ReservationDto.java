@@ -15,5 +15,6 @@ public class ReservationDto {
     private LocalDate startDate;
     private LocalDate endDate;
     private double price;
+    private boolean enabled;
 
 }

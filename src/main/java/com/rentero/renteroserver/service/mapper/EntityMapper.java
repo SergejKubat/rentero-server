@@ -39,6 +39,7 @@ public class EntityMapper {
 
         reservation.setStartDate(reservationReqDto.getStartDate());
         reservation.setEndDate(reservationReqDto.getEndDate());
+        reservation.setEnabled(false);
 
         return reservation;
     }

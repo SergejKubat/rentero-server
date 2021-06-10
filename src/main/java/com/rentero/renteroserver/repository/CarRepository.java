@@ -11,6 +11,8 @@ public interface CarRepository extends JpaRepository<Car, Long> {
 
     List<Car> findAllByCompanyId(long companyId);
 
+    List<Car> findAllByReservedFalse();
+
     List<Car> findAllByPricePerDayIsLessThanEqual(double price);
 
 }

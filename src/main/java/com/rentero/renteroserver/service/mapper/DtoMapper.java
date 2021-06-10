@@ -64,6 +64,7 @@ public class DtoMapper {
         reservationDto.setStartDate(reservation.getStartDate());
         reservationDto.setEndDate(reservation.getEndDate());
         reservationDto.setPrice(reservation.getPrice());
+        reservationDto.setEnabled(reservation.isEnabled());
 
         return reservationDto;
     }

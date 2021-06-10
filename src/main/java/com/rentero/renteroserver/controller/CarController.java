@@ -21,7 +21,7 @@ public class CarController {
 
     @GetMapping
     public List<CarDto> getAll(@RequestParam(name = "companyId", defaultValue = "0", required = false) long companyId) {
-        if (companyId == 0) {
+        if (companyId != 0) {
             return carService.getAllByCompanyId(companyId);
         }
         return carService.getAll();
