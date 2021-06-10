@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}" lang="en">
+<head>
+    <title th:text="#{email.activation.title}">Courseholic creation</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style>
+        .header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 20px;
+            padding: 25px 0;
+            font-size: 18px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            background-color: #e91e63;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <p>Courseholic</p>
+</div>
+<p th:text="#{email.activation.greeting(${customer.fullName})}">Dear</p>
+<p th:text="#{email.activation.text1}">Your Courseholic account has been created</p>
+<br />
+<p>
+    <span th:text="#{email.activation.text2}">Regards, </span>
+    <br />
+    <em th:text="#{email.signature}">Courseholic</em>
+</p>
+</body>
+</html>

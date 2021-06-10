@@ -23,12 +23,15 @@ public class CustomerService {
     private CustomerRepository customerRepository;
     private RoleRepository roleRepository;
 
+    private MailService mailService;
+
     private DtoMapper dtoMapper;
     private EntityMapper entityMapper;
 
-    public CustomerService(CustomerRepository customerRepository, RoleRepository roleRepository, DtoMapper dtoMapper, EntityMapper entityMapper) {
+    public CustomerService(CustomerRepository customerRepository, RoleRepository roleRepository, MailService mailService, DtoMapper dtoMapper, EntityMapper entityMapper) {
         this.customerRepository = customerRepository;
         this.roleRepository = roleRepository;
+        this.mailService = mailService;
         this.dtoMapper = dtoMapper;
         this.entityMapper = entityMapper;
     }
@@ -57,6 +60,8 @@ public class CustomerService {
         customer.setRoles(roles);
 
         Customer newCustomer = customerRepository.save(customer);
+
+        //mailService.sendCreationEmail(customer);
 
         return dtoMapper.mapToCustomerDto(newCustomer);
     }
