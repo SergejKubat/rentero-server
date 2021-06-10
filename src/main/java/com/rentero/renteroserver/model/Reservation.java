@@ -15,6 +15,7 @@ public class Reservation {
     @Column(name = "end_date")
     private LocalDate endDate;
     private double price;
+    private boolean enabled;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
@@ -25,10 +26,12 @@ public class Reservation {
     public Reservation() {
     }
 
-    public Reservation(LocalDate startDate, LocalDate endDate, double price) {
+    public Reservation(long id, LocalDate startDate, LocalDate endDate, double price, boolean enabled) {
+        this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;
         this.price = price;
+        this.enabled = enabled;
     }
 
     public long getId() {
@@ -61,6 +64,14 @@ public class Reservation {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     public Customer getCustomer() {

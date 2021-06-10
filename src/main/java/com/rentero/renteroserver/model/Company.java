@@ -11,6 +11,7 @@ public class Company {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
+    @Column(length = 1000)
     private String description;
     @Column(name = "image_url")
     private String imageUrl;

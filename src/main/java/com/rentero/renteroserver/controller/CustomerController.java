@@ -2,6 +2,7 @@ package com.rentero.renteroserver.controller;
 
 import com.rentero.renteroserver.payload.request.CustomerReqDto;
 import com.rentero.renteroserver.payload.response.CustomerDto;
+import com.rentero.renteroserver.repository.CustomerRepository;
 import com.rentero.renteroserver.service.CustomerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +17,11 @@ import java.util.List;
 public class CustomerController {
 
     private CustomerService customerService;
+    private CustomerRepository customerRepository;
 
-    public CustomerController(CustomerService customerService) {
+    public CustomerController(CustomerService customerService, CustomerRepository customerRepository) {
         this.customerService = customerService;
+        this.customerRepository = customerRepository;
     }
 
     @GetMapping
@@ -32,10 +35,19 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ResponseEntity<CustomerDto> createCustomer(@Valid @RequestBody CustomerReqDto customerReqDto) {
-        CustomerDto customerDto = customerService.createCustomer(customerReqDto);
+    public ResponseEntity<String> createCustomer(@Valid @RequestBody CustomerReqDto customerReqDto) {
 
-        return new ResponseEntity<>(customerDto, HttpStatus.CREATED);
+        if (customerRepository.existsByEmail(customerReqDto.getEmail())) {
+            return new ResponseEntity<>("Email is already taken!", HttpStatus.BAD_REQUEST);
+        }
+
+        if (customerRepository.existsByPhoneNumber(customerReqDto.getPhoneNumber())) {
+            return new ResponseEntity<>("Phone number is already taken!", HttpStatus.BAD_REQUEST);
+        }
+
+        customerService.createCustomer(customerReqDto);
+
+        return new ResponseEntity<>("Customer registered successfully.", HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
