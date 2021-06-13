@@ -43,7 +43,7 @@ public class ReviewController {
     public ResponseEntity<String> deleteReview(@PathVariable(name = "id") long id) {
         reviewService.deleteReview(id);
 
-        return new ResponseEntity<>("Review deleted successfully.", HttpStatus.OK);
+        return new ResponseEntity<>("Ocena uspešno obrisana.", HttpStatus.OK);
     }
 
 }

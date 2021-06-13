@@ -43,7 +43,7 @@ public class ReservationController {
     public ResponseEntity<String> deleteReservation(@PathVariable(name = "id") long id) {
         reservationService.deleteReservation(id);
 
-        return new ResponseEntity<>("Reservation deleted successfully.", HttpStatus.OK);
+        return new ResponseEntity<>("Rezervacija uspešno obrisana.", HttpStatus.OK);
     }
 
 }

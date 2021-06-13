@@ -1,5 +1,6 @@
 package com.rentero.renteroserver.service;
 
+import com.rentero.renteroserver.exception.RenteroException;
 import com.rentero.renteroserver.exception.ResourceNotFoundException;
 import com.rentero.renteroserver.model.Customer;
 import com.rentero.renteroserver.model.Role;
@@ -10,6 +11,7 @@ import com.rentero.renteroserver.repository.RoleRepository;
 import com.rentero.renteroserver.security.SecurityUtils;
 import com.rentero.renteroserver.service.mapper.DtoMapper;
 import com.rentero.renteroserver.service.mapper.EntityMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -66,10 +68,14 @@ public class CustomerService {
         return dtoMapper.mapToCustomerDto(newCustomer);
     }
 
-    public CustomerDto uploadAvatar(String avatarUrl) {
+    public CustomerDto uploadAvatar(String avatarUrl, long customerId) {
         String customerEmail = SecurityUtils.getCurrentCustomerEmail();
 
         Customer customer = customerRepository.findByEmail(customerEmail).get();
+
+        if (customer.getId() != customerId) {
+            throw new RenteroException(HttpStatus.BAD_REQUEST, "Pogrešan nalog.");
+        }
 
         customer.setAvatarUrl(avatarUrl);
 

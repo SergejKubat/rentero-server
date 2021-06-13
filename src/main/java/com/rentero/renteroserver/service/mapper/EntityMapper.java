@@ -28,7 +28,7 @@ public class EntityMapper {
         customer.setPhoneNumber(customerReqDto.getPhoneNumber());
         customer.setPassword(passwordEncoder.encode(customerReqDto.getPassword()));
         customer.setDateCreated(LocalDate.now());
-        customer.setAvatarUrl("public/img");
+        customer.setAvatarUrl("http://localhost:8080/img/user.png");
         customer.setEnabled(true);
 
         return customer;
