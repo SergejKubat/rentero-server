@@ -29,9 +29,9 @@ public class CustomerController {
         return customerService.getAll();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<CustomerDto> getById(@PathVariable(name = "id") long id) {
-        return new ResponseEntity<>(customerService.getById(id), HttpStatus.OK);
+    @GetMapping("/{email}")
+    public ResponseEntity<CustomerDto> getByEmail(@PathVariable(name = "email") String email) {
+        return new ResponseEntity<>(customerService.getByEmail(email), HttpStatus.OK);
     }
 
     @PutMapping("/{id}/upload")

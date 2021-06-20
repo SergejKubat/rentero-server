@@ -42,6 +42,12 @@ public class ReviewService {
         return reviews.stream().map(review -> dtoMapper.mapToReviewDto(review)).collect(Collectors.toList());
     }
 
+    public List<ReviewDto> getAllByCompanyId(long companyId) {
+        List<Review> companyReviews = reviewRepository.findAllByCompanyId(companyId);
+
+        return companyReviews.stream().map(review -> dtoMapper.mapToReviewDto(review)).collect(Collectors.toList());
+    }
+
     public ReviewDto getById(long reviewId) {
         Review review = reviewRepository.findById(reviewId).orElseThrow(() -> new ResourceNotFoundException("Review", "id", String.valueOf(reviewId)));
 

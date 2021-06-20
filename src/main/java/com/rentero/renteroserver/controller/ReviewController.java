@@ -22,8 +22,11 @@ public class ReviewController {
     }
 
     @GetMapping
-    public List<ReviewDto> getAll() {
-        return reviewService.getAll();
+    public List<ReviewDto> getAll(@RequestParam(name = "companyId", defaultValue = "0") long companyId) {
+        if (companyId == 0) {
+            return reviewService.getAll();
+        }
+        return reviewService.getAllByCompanyId(companyId);
     }
 
     @GetMapping("/{id}")

@@ -11,6 +11,7 @@ public class DtoMapper {
         CarDto carDto = new CarDto();
 
         carDto.setId(car.getId());
+        carDto.setCompanyId(car.getCompany().getId());
         carDto.setBrand(car.getBrand());
         carDto.setModel(car.getModel());
         carDto.setCapacity(car.getCapacity());
@@ -61,6 +62,7 @@ public class DtoMapper {
         ReservationDto reservationDto = new ReservationDto();
 
         reservationDto.setId(reservation.getId());
+        reservationDto.setCarId(reservation.getCar().getId());
         reservationDto.setStartDate(reservation.getStartDate());
         reservationDto.setEndDate(reservation.getEndDate());
         reservationDto.setPrice(reservation.getPrice());
@@ -73,6 +75,7 @@ public class DtoMapper {
         ReviewDto reviewDto = new ReviewDto();
 
         reviewDto.setId(review.getId());
+        reviewDto.setCustomerId(review.getCustomer().getId());
         reviewDto.setMark(review.getMark());
         reviewDto.setComment(review.getComment());
         reviewDto.setDateCreated(review.getDateCreated());

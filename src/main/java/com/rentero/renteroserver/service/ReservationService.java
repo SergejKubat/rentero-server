@@ -37,9 +37,11 @@ public class ReservationService {
     }
 
     public List<ReservationDto> getAll() {
-        List<Reservation> reservations = reservationRepository.findAll();
+        String customerEmail = SecurityUtils.getCurrentCustomerEmail();
 
-        return reservations.stream().map(reservation -> dtoMapper.mapToReservationDto(reservation)).collect(Collectors.toList());
+        Customer customer = customerRepository.findByEmail(customerEmail).get();
+
+        return customer.getReservations().stream().map(reservation -> dtoMapper.mapToReservationDto(reservation)).collect(Collectors.toList());
     }
 
     public ReservationDto getById(long id) {

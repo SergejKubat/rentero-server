@@ -12,6 +12,7 @@ import java.time.LocalDate;
 public class ReviewDto {
 
     private long id;
+    private long customerId;
     private int mark;
     private String comment;
     private LocalDate dateCreated;

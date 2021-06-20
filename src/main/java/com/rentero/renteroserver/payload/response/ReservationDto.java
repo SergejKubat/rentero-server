@@ -12,6 +12,7 @@ import java.time.LocalDate;
 public class ReservationDto {
 
     private long id;
+    private long carId;
     private LocalDate startDate;
     private LocalDate endDate;
     private double price;

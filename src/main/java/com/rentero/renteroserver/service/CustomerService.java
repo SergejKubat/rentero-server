@@ -50,6 +50,12 @@ public class CustomerService {
         return dtoMapper.mapToCustomerDto(customer);
     }
 
+    public CustomerDto getByEmail(String email) {
+        Customer customer = customerRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("Customer", "email", email));
+
+        return dtoMapper.mapToCustomerDto(customer);
+    }
+
     public CustomerDto createCustomer(CustomerReqDto customerReqDto) {
         Customer customer = entityMapper.mapToCustomerEntity(customerReqDto);
 
