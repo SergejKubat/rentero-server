@@ -75,7 +75,8 @@ public class DtoMapper {
         ReviewDto reviewDto = new ReviewDto();
 
         reviewDto.setId(review.getId());
-        reviewDto.setCustomerId(review.getCustomer().getId());
+        reviewDto.setCustomerName(review.getCustomer().getFullName());
+        reviewDto.setCustomerAvatar(review.getCustomer().getAvatarUrl());
         reviewDto.setMark(review.getMark());
         reviewDto.setComment(review.getComment());
         reviewDto.setDateCreated(review.getDateCreated());
