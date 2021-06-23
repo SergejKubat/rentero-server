@@ -62,7 +62,8 @@ public class DtoMapper {
         ReservationDto reservationDto = new ReservationDto();
 
         reservationDto.setId(reservation.getId());
-        reservationDto.setCarId(reservation.getCar().getId());
+        reservationDto.setCarBrandAndModel(reservation.getCar().getBrand() + " " + reservation.getCar().getModel());
+        reservationDto.setCompanyAddress(reservation.getCar().getCompany().getAddress());
         reservationDto.setStartDate(reservation.getStartDate());
         reservationDto.setEndDate(reservation.getEndDate());
         reservationDto.setPrice(reservation.getPrice());
